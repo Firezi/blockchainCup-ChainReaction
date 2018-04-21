@@ -21,7 +21,7 @@ instance = web3.eth.contract(abi=contract_interface['abi'], address=contract_add
 
 
 def push(_type, _shareName, _cost, _count, _comission, _time, _signature):
-    instance.addTrade(_type, _shareName, _cost, _count, _comission, _time, _signature, transact={'from': trader_address})
+    instance.addTrade(_type, _shareName, int(_cost * 100), _count, int(_comission * 100), _time, _signature, transact={'from': trader_address})
 
 
-push('sell', 'SBR', 10000, 1, 1, 123, 'sign')
+# push('sell', 'SBR', 100.23, 1, 1.01, 123, 'sign')
