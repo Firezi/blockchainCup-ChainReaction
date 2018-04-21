@@ -1,2 +1,4 @@
+__pyache__/
+.idea/
 venv/
 smart-contract/build/
