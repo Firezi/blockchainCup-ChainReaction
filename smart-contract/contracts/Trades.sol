@@ -10,6 +10,7 @@ contract Trades {
 		uint cost; // * 100
 		uint count;
 		uint time;
+		string signature;
 	}
 
 	mapping (address => bool) public isTrader;
@@ -36,14 +37,15 @@ contract Trades {
 	}
 
 
-	function addTrade(bool _type, string _shareName, uint _cost, uint _count, uint _time) onlyTrader public {
+	function addTrade(bool _type, string _shareName, uint _cost, uint _count, uint _time, string _signature) onlyTrader public {
 		tradesList.push(Trade({
 				trader: msg.sender,
 				tradeType: _type,
 				shareName: _shareName,
 				cost: _cost,
 				count: _count,
-				time: _time
+				time: _time,
+				signature: _signature
 			}));
 
 		emit NewTrade(msg.sender, _type, _shareName, _cost, _count, _time);
@@ -54,8 +56,8 @@ contract Trades {
 		return tradesList.length;
 	}
 
-	function getTrade(uint index) public constant returns (address, bool, string, uint, uint, uint) {
+	function getTrade(uint index) public constant returns (address, bool, string, uint, uint, uint, string) {
 		return (tradesList[index].trader, tradesList[index].tradeType, tradesList[index].shareName, tradesList[index].cost,
-				tradesList[index].count, tradesList[index].time);
+				tradesList[index].count, tradesList[index].time, tradesList[index].signature);
 	}
 }
