@@ -110,6 +110,7 @@ def operations(deals, portfolio = pd.DataFrame({"ticker" : [],
                         
                         portfolio = portfolio.drop(index2)
     trade.profit = trade.diffQuantity * trade.diffPrice
+    trade = trade.assign(percentProfit = trade.profit / 10000)
     return trade
 
 
