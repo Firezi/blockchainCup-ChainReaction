@@ -5,7 +5,7 @@ contract Trades {
 
 	struct Trade {
 		address trader;
-		bool tradeType; // 0 - buy, 1 - sell
+		string tradeType; // buy or sell
 		string shareName;
 		uint cost; // * 100
 		uint count;
@@ -26,7 +26,7 @@ contract Trades {
 		_; 
 	}
 	
-	event NewTrade(address trader, bool _type, string shareName, uint cost, uint count, uint time);
+	event NewTrade(address trader, string _type, string shareName, uint cost, uint count, uint time);
 
 	function Trades() public {
 		owner = msg.sender;
@@ -37,7 +37,7 @@ contract Trades {
 	}
 
 
-	function addTrade(bool _type, string _shareName, uint _cost, uint _count, uint _time, string _signature) onlyTrader public {
+	function addTrade(string _type, string _shareName, uint _cost, uint _count, uint _time, string _signature) onlyTrader public {
 		tradesList.push(Trade({
 				trader: msg.sender,
 				tradeType: _type,
@@ -56,7 +56,7 @@ contract Trades {
 		return tradesList.length;
 	}
 
-	function getTrade(uint index) public constant returns (address, bool, string, uint, uint, uint, string) {
+	function getTrade(uint index) public constant returns (address, string, string, uint, uint, uint, string) {
 		return (tradesList[index].trader, tradesList[index].tradeType, tradesList[index].shareName, tradesList[index].cost,
 				tradesList[index].count, tradesList[index].time, tradesList[index].signature);
 	}
