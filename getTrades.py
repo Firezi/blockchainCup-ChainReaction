@@ -15,26 +15,27 @@ contract_source_code = ''.join(contract_fs.readlines())
 compiled_sol = compile_source(contract_source_code)
 contract_interface = compiled_sol['<stdin>:Trades']
 
-
 instance = web3.eth.contract(abi=contract_interface['abi'], address=contract_address,
-                                      ContractFactoryClass=ConciseContract)
+                             ContractFactoryClass=ConciseContract)
 
 contract = web3.eth.contract(address=contract_address, abi=contract_interface['abi'])
 
+
 def sendToBack(trade):
-	print(trade)
+    print(trade)
 
 
 last_count = 0;
 
+
 def getTrades():
-	global last_count
-	while True:
-		count = instance.getSize()
-		for i in range(last_count, count):
-			sendToBack(instance.getTrade(i))
-		last_count = count
-		time.sleep(2)
+    global last_count
+    while True:
+        count = instance.getSize()
+        for i in range(last_count, count):
+            sendToBack(instance.getTrade(i))
+        last_count = count
+        time.sleep(2)
+
 
 getTrades()
-

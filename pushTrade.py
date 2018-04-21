@@ -16,11 +16,12 @@ contract_source_code = ''.join(contract_fs.readlines())
 compiled_sol = compile_source(contract_source_code)
 contract_interface = compiled_sol['<stdin>:Trades']
 
-
 instance = web3.eth.contract(abi=contract_interface['abi'], address=contract_address,
-                                      ContractFactoryClass=ConciseContract)
+                             ContractFactoryClass=ConciseContract)
+
 
 def push(_type, _shareName, _cost, _count, _comission, _time, _signature):
-	instance.addTrade(_type, _shareName, _cost, _count, _comission, _time, _signature, transact={'from': trader_address})
+    instance.addTrade(_type, _shareName, _cost, _count, _comission, _time, _signature, transact={'from': trader_address})
+
 
 push('sell', 'SBR', 10000, 1, 1, 123, 'sign')
