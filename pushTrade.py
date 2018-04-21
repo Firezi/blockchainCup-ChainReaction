@@ -20,5 +20,5 @@ contract_interface = compiled_sol['<stdin>:Trades']
 instance = web3.eth.contract(abi=contract_interface['abi'], address=contract_address,
                                       ContractFactoryClass=ConciseContract)
 
-def push(_type, _shareName, _cost, _count, _time, _signature):
-	instance.addTrade(_type, _shareName, _cost, _count, _time, _signature, transact={'from': trader_address})
+def push(_type, _shareName, _cost, _count, _comission, _time, _signature):
+	instance.addTrade(_type, _shareName, _cost, _count, _comission, _time, _signature, transact={'from': trader_address})

@@ -9,6 +9,7 @@ contract Trades {
 		string shareName;
 		uint cost; // * 100
 		uint count;
+		uint comission;
 		uint time;
 		string signature;
 	}
@@ -26,7 +27,7 @@ contract Trades {
 		_; 
 	}
 	
-	event NewTrade(address trader, string _type, string shareName, uint cost, uint count, uint time);
+	event NewTrade(address trader, string tradeType, string shareName, uint cost, uint count, uint comission, uint time, string signature);
 
 	function Trades() public {
 		owner = msg.sender;
@@ -37,18 +38,19 @@ contract Trades {
 	}
 
 
-	function addTrade(string _type, string _shareName, uint _cost, uint _count, uint _time, string _signature) onlyTrader public {
+	function addTrade(string _type, string _shareName, uint _cost, uint _count, uint _comission, uint _time, string _signature) onlyTrader public {
 		tradesList.push(Trade({
 				trader: msg.sender,
 				tradeType: _type,
 				shareName: _shareName,
 				cost: _cost,
 				count: _count,
+				comission: _comission,
 				time: _time,
 				signature: _signature
 			}));
 
-		emit NewTrade(msg.sender, _type, _shareName, _cost, _count, _time);
+		emit NewTrade(msg.sender, _type, _shareName, _cost, _count, _comission, _time, _signature);
 	}
 
 
@@ -56,8 +58,8 @@ contract Trades {
 		return tradesList.length;
 	}
 
-	function getTrade(uint index) public constant returns (address, string, string, uint, uint, uint, string) {
+	function getTrade(uint index) public constant returns (address, string, string, uint, uint, uint, uint) {
 		return (tradesList[index].trader, tradesList[index].tradeType, tradesList[index].shareName, tradesList[index].cost,
-				tradesList[index].count, tradesList[index].time, tradesList[index].signature);
+				tradesList[index].count, tradesList[index].comission, tradesList[index].time);
 	}
 }
