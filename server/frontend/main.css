@@ -1,0 +1,70 @@
+#result, article {
+	max-width: 700px;
+	margin: auto;
+	transition: 0.3s all;
+	opacity: 0;
+}
+article {
+	font-size: 20px;
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+.trader-about-btn {
+	margin: 8px;
+}
+
+.trader-title {
+	color: grey;
+	text-align: center;
+}
+.trader-title > i {
+	vertical-align: middle;
+}
+.trader-contact {
+	margin: 30px;
+}
+.filter-checkbox-container {
+	width: 50%;
+	display: inline-block;
+}
+
+#metrics-filters {
+	padding: 30px;
+    padding-left: 50px;
+}
+
+.brand-logo {
+	padding-left: 10px !important;
+}
+
+.line-label {
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	border-radius: 2px;
+	vertical-align: middle;
+}
+
+nav {
+	overflow: hidden;
+}
+th {
+	cursor: pointer;
+}
+
+.trader-description {
+	font-size: 20px;
+	padding: 20px;
+    padding-left: 52px;
+}
+
+p {
+	text-align: center;
+}
+
+.consts-chart {
+	width: 100px;
+	height: 500px;
+	display: inline-block;
+	text-align: center;
+}
