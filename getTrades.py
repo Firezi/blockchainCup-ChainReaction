@@ -9,6 +9,10 @@ from keys import publicKey
 from Crypto.Hash import SHA256
 from Crypto.Signature import pkcs1_15
 
+import requests
+import json
+import time
+
 from addresses import contract_address
 
 web3 = Web3(HTTPProvider('http://localhost:9545'))
@@ -31,10 +35,21 @@ def sendToBack(trade):
     trade = list(trade)
     if trade[1] == 'sell':
         trade[4] = -1 * trade[4]
-    print(trade)
-    newdeal = pandas.DataFrame({"ticker": [trade[2]], "price": [trade[3]], "quantity": [trade[4] / 100],
-                                "comission": [trade[5]], "time": [trade[6]], "address": [trade[0]]})
-    
+
+    data = {"ticker": [trade[2]], "price": [trade[3] / 100], "quantity": [trade[4]],
+            "comission": [trade[5] / 100], "time": [trade[6]], "address": [trade[0]]}
+    print(data)
+
+    url = 'http://192.168.43.46:3000/rawData'
+    answer = requests.post(url, data=json.dumps(data), headers={'Content-type': 'application/json'})
+    print(answer)
+
+
+def removeAll():
+    url = 'http://192.168.43.46:3000/removeOldData'
+    answer = requests.post(url, data={})
+    print(answer)
+    time.sleep(2)
 
 
 def checkSign(trade):
@@ -57,8 +72,10 @@ def checkSign(trade):
 
 last_count = 0
 
+
 def getTrades():
     global last_count
+    removeAll()
     while True:
         count = instance.getSize()
         for i in range(last_count, count):
