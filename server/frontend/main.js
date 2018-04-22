@@ -10,7 +10,7 @@ const genTable = data => {
     <tr>
       <th data-order="name">Трейдер</th>
       <th data-order="profit">Доходность</th>
-      <th data-order="recovery_factor">Возвратность</th>
+      <th data-order="recovery_factor">Recovery</th>
       <th data-order="max_dropdown">Максимальная просадка</th>
       <th></th>
     </tr>
@@ -44,7 +44,7 @@ const genTable = data => {
 
 
 const translates = {
-  recovery_factor: 'Возвратность',
+  recovery_factor: 'Recovery factor',
   profit_factor: 'Profit factor',
   profit_factor: 'Доходность',
   max_dropdown: 'Максимальная просадка',
@@ -94,6 +94,7 @@ const renderTrader = trader => {
     </div>*/
   `
   <h2 class="trader-title"><i class="material-icons medium">person</i> ${trader.name}</h2>
+  <h5 class="trader-title"><i class="material-icons">account_balance_wallet</i> ${trader.id}</h2>
   <div class="ct-chart ct-perfect-fourth" id="profit-chart"></div>
   <p>Доходность (в рублях)</p>
   <div class="ct-chart ct-perfect-fourth" id="prfoit-prc-chart"></div>
