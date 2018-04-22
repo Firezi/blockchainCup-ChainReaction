@@ -1,25 +1,28 @@
 import pandas as pd
 import numpy as np
 #это получаю на вход (новые операции) (здесь для теста придуманы значения)
-newdeals = pd.DataFrame({"ticker" : ["SB", "MTS", "SB"],
-                     "price": [228, 1137, 500],
-                     "quantity" : [-10, 9, -1],
-                     "commission" : [1, 1, 1],
-                     "time": ["4/20/18 16:20", "4/20/18 16:25", "4/20/18 16:35"]})
+newdeals = pd.DataFrame({"address" : ["shoha1", "shoha1", "shoha1", "shoha1", "shoha1"],
+                         "ticker" : ["SB", "MTS", "SB", "SB", "SB"],
+                         "price": [180, 1137, 100, 800, 900],
+                         "quantity" : [-10, 9, -8, 5, 5],
+                         "commission" : [1, 1, 1, 1, 1],
+                         "time": ["4/20/18 16:20", "4/20/18 16:25", "4/20/18 16:35", "4/20/18 16:40", "4/20/18 16:45"]})
 
-#текущее состояние портфеля/баланс (здесь для теста придуманы значения)
-currentportfolio = pd.DataFrame({"ticker" : ["SB", "jmih"],
-                                 "quantity" : [15, 9],
-                                 "price" : [200, 10]})
+#ЭТА СТРОЧКА ОБЯЗАТЕЛЬНО ДОЛЖНА БЫТЬ ПЕРЕД ИСПОЛНЕНИЕМ ФУНКЦИИ
+portfolio = pd.DataFrame({"address" : ["NA"],
+                          "ticker" : ["NA"],
+                          "price" : ["NA"],
+                          "quantity" : ["NA"]})
 
-
-def operations(deals, portfolio = pd.DataFrame({"ticker" : [],
+def operations(deals, portfolio = pd.DataFrame({"address" : [],
+                                                "ticker" : [],
                                                 "price" : [],
                                                 "quantity" : []})):
-    trade = pd.DataFrame({"ticker" : [],
-                      "diffPrice" : [],
-                      "diffQuantity" : [],
-                      "profit" : []})
+    trade = pd.DataFrame({"address" : [],
+                          "ticker" : [],
+                          "diffPrice" : [],
+                          "diffQuantity" : [],
+                          "profit" : []})
     for i in range(0, len(deals)):
         if any(deals.ticker[i] == portfolio.ticker):
             index = int(np.where(portfolio.ticker == deals.ticker[i])[0][0])
@@ -32,7 +35,8 @@ def operations(deals, portfolio = pd.DataFrame({"ticker" : [],
                     portfolio.quantity[index] += deals.quantity[i] 
                 else:
                     #если по разной цене, то просто добавляет новую строчку того же типа
-                    portfolio = portfolio.append(pd.DataFrame({"quantity" : [deals.quantity[i]],
+                    portfolio = portfolio.append(pd.DataFrame({"address" : [deals.address[i]],
+                                                               "quantity" : [deals.quantity[i]],
                                                                "price" : [deals.price[i]],
                                                                "ticker": [deals.ticker[i]]}), ignore_index = True)
             else: #если все-таки разные знаки операций            
@@ -43,26 +47,30 @@ def operations(deals, portfolio = pd.DataFrame({"ticker" : [],
                 #уходят в trade
                 if deals.quantity[i] > 0: #если покупаем
                     if abs(portfolio.quantity[index]) <= abs(deals.quantity[i]):
-                        trade = trade.append(pd.DataFrame({"diffQuantity" : [abs(portfolio.quantity[index])],
+                        trade = trade.append(pd.DataFrame({"address" : [deals.address[i]],
+                                                           "diffQuantity" : [abs(portfolio.quantity[index])],
                                                            "diffPrice" : [portfolio.price[index] - deals.price[i]],
                                                            "ticker": [deals.ticker[i]],
                                                            "time" : [deals.time[i]]}), ignore_index = True)
                         portfolio.at[index, "price"] = deals.price[i]
                     else:
-                        trade = trade.append(pd.DataFrame({"diffQuantity" : [abs(deals.quantity[i])],
+                        trade = trade.append(pd.DataFrame({"address" : [deals.address[i]],
+                                                           "diffQuantity" : [abs(deals.quantity[i])],
                                                            "diffPrice" : [portfolio.price[index] - deals.price[i]],
                                                            "ticker": [deals.ticker[i]],
                                                            "time" : [deals.time[i]]}), ignore_index = True)
                         portfolio.at[index, "price"] = portfolio.price[index]
                 else: #если продаём
                     if abs(portfolio.quantity[index]) <= abs(deals.quantity[i]):
-                        trade = trade.append(pd.DataFrame({"diffQuantity" : [abs(portfolio.quantity[index])],
+                        trade = trade.append(pd.DataFrame({"address" : [deals.address[i]],
+                                                           "diffQuantity" : [abs(portfolio.quantity[index])],
                                                            "diffPrice" : [deals.price[i] - portfolio.price[index]],
                                                            "ticker": [deals.ticker[i]],
                                                            "time" : [deals.time[i]]}), ignore_index = True)
                         portfolio.at[index, "price"] = deals.price[i]
                     else:
-                        trade = trade.append(pd.DataFrame({"diffQuantity" : [abs(deals.quantity[i])],
+                        trade = trade.append(pd.DataFrame({"address" : [deals.address[i]],
+                                                           "diffQuantity" : [abs(deals.quantity[i])],
                                                            "diffPrice" : [deals.price[i] - portfolio.price[index]],
                                                            "ticker": [deals.ticker[i]],
                                                            "time" : [deals.time[i]]}), ignore_index = True)
@@ -79,26 +87,30 @@ def operations(deals, portfolio = pd.DataFrame({"ticker" : [],
                         
                         if portfolio.quantity[index] > 0: #если покупаем
                             if abs(portfolio.quantity[index2]) <= abs(portfolio.quantity[index]):
-                                trade = trade.append(pd.DataFrame({"diffQuantity" : [abs(portfolio.quantity[index2])],
+                                trade = trade.append(pd.DataFrame({"address" : [deals.address[i]],
+                                                                   "diffQuantity" : [abs(portfolio.quantity[index2])],
                                                                    "diffPrice" : [portfolio.price[index2] - portfolio.price[index]],
                                                                    "ticker": [portfolio.ticker[index]],
                                                                    "time" : [deals.time[i]]}), ignore_index = True)
                                 portfolio.at[index, "price"] = portfolio.price[index]
                             else:
-                                trade = trade.append(pd.DataFrame({"diffQuantity" : [abs(portfolio.quantity[index])],
+                                trade = trade.append(pd.DataFrame({"address" : [deals.address[i]],
+                                                                   "diffQuantity" : [abs(portfolio.quantity[index])],
                                                                    "diffPrice" : [portfolio.price[index2] - portfolio.price[index]],
                                                                    "ticker": [portfolio.ticker[index]],
                                                                    "time" : [deals.time[i]]}), ignore_index = True)
                                 portfolio.at[index, "price"] = portfolio.price[index2]
                         else: #если продаём
                             if abs(portfolio.quantity[index2]) <= abs(portfolio.quantity[index]):
-                                trade = trade.append(pd.DataFrame({"diffQuantity" : [abs(portfolio.quantity[index2])],
+                                trade = trade.append(pd.DataFrame({"address" : [deals.address[i]],
+                                                                   "diffQuantity" : [abs(portfolio.quantity[index2])],
                                                                    "diffPrice" : [portfolio.price[index] - portfolio.price[index2]],
                                                                    "ticker": [portfolio.ticker[index]],
                                                                    "time" : [deals.time[i]]}), ignore_index = True)
                                 portfolio.at[index, "price"] = portfolio.price[index]
                             else:
-                                trade = trade.append(pd.DataFrame({"diffQuantity" : [abs(portfolio.quantity[index])],
+                                trade = trade.append(pd.DataFrame({"address" : [deals.address[i]],
+                                                                   "diffQuantity" : [abs(portfolio.quantity[index])],
                                                                    "diffPrice" : [portfolio.price[index] - portfolio.price[index2]],
                                                                    "ticker": [portfolio.ticker[index]],
                                                                    "time" : [deals.time[i]]}), ignore_index = True)
@@ -109,6 +121,8 @@ def operations(deals, portfolio = pd.DataFrame({"ticker" : [],
                         #portfolio.at[index, "price"] = portPrice
                         
                         portfolio = portfolio.drop(index2)
+        else:
+            portfolio = portfolio.append(deals.iloc[i])
     trade.profit = trade.diffQuantity * trade.diffPrice
     trade = trade.assign(percentProfit = trade.profit / 10000)
     
@@ -117,12 +131,12 @@ def operations(deals, portfolio = pd.DataFrame({"ticker" : [],
     for i in range(1, len(trade)):
         trade.at[i, "dinamicProfit"] = trade.profit[i] + trade.dinamicProfit[i - 1]
         
-    return trade
+    return trade, portfolio
 
 
 ###demo
-tradedemo = operations(deals = newdeals, portfolio = currentportfolio)
-
+###Обязательно передать portfolio
+tradedemo, portfolio = operations(deals = newdeals, portfolio = portfolio)
 profitFactor = (tradedemo.profit.sum() - tradedemo.profit.max()) / tradedemo.loc[tradedemo["profit"] < 0].profit.sum()
 
 def maxdd(tradedemo):
