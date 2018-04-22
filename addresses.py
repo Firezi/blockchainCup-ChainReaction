@@ -1,0 +1,2 @@
+contract_address = "0x0d8cc4b8d15d4c3ef1d70af0071376fb26b5669b"
+trader_address = "0x627306090abab3a6e1400e9345bc60c78a8bef57"

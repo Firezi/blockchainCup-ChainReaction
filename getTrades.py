@@ -5,9 +5,13 @@ import time
 from tradeFormation import operations
 import pandas
 
-web3 = Web3(HTTPProvider('http://localhost:9545'))
+from keys import publicKey
+from Crypto.Hash import SHA256
+from Crypto.Signature import pkcs1_15
 
-contract_address = "0x345ca3e014aaf5dca488057592ee47305d9b3e10"
+from addresses import contract_address
+
+web3 = Web3(HTTPProvider('http://localhost:9545'))
 
 contract_address = web3.toChecksumAddress(contract_address)
 
@@ -30,18 +34,37 @@ def sendToBack(trade):
     print(trade)
     newdeal = pandas.DataFrame({"ticker": [trade[2]], "price": [trade[3]], "quantity": [trade[4] / 100],
                                 "comission": [trade[5]], "time": [trade[6]], "address": [trade[0]]})
-    operations(newdeal)
+    
+
+
+def checkSign(trade):
+    # s = trade[1] + trade[2] + str(trade[3]) + str(trade[4]) + str(trade[5]) + str(trade[6])
+    # print(s)
+    # s = s.encode()
+    # h = SHA256.new()
+    # h.update(s)
+    # try:
+    #     pkcs1_15.new(publicKey).verify(h, trade[7])
+    #     return True
+    # except ValueError:
+    #     print('Signature failed: ', trade)
+    #     return False
+    if trade[7] == "signature":
+        return True
+    print('Signature failed: ', trade)
+    return False
 
 
 last_count = 0
-
 
 def getTrades():
     global last_count
     while True:
         count = instance.getSize()
         for i in range(last_count, count):
-            sendToBack(instance.getTrade(i))
+            tr = instance.getTrade(i)
+            if checkSign(tr):
+                sendToBack(tr)
         last_count = count
         time.sleep(2)
 

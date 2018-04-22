@@ -58,8 +58,9 @@ contract Trades {
 		return tradesList.length;
 	}
 
-	function getTrade(uint index) public constant returns (address, string, string, uint, uint, uint, uint) {
-		return (tradesList[index].trader, tradesList[index].tradeType, tradesList[index].shareName, tradesList[index].cost,
-				tradesList[index].count, tradesList[index].comission, tradesList[index].time);
+	function getTrade(uint index) public constant returns (address, string, string, uint, uint, uint, uint, string) {
+		uint i = index;
+		return (tradesList[i].trader, tradesList[i].tradeType, tradesList[i].shareName, tradesList[i].cost,
+				tradesList[i].count, tradesList[i].comission, tradesList[i].time, tradesList[i].signature);
 	}
 }
