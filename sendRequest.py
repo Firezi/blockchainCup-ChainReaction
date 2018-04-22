@@ -22,16 +22,27 @@ newdeals.index = range(len(newdeals))
 
 trade, portfolio = operations(deals = newdeals, portfolio = portfolio)
 
-profitFactor = (trade.profit.sum() - trade.profit.max()) / trade.loc[trade["profit"] < 0].profit.sum()
-    
+if trade.loc[trade["profit"] < 0].profit.sum() != 0:
+    profitFactor = (trade.profit.sum() - trade.profit.max()) / trade.loc[trade["profit"] < 0].profit.sum()
+else:
+    profitFactor = trade.profit.sum() - trade.profit.max()
 def maxdd(trade):
     MinIndex = np.where(trade.dinamicProfit == trade.dinamicProfit.min())[0][0]
-    maxddvalue = trade.iloc[range(MinIndex)].dinamicProfit.max() - trade.dinamicProfit.min()
+    if len(trade.iloc[range(MinIndex)]) == 0:
+        maxddvalue = 0
+    else:
+        maxddvalue = trade.iloc[range(MinIndex)].dinamicProfit.max() - trade.dinamicProfit.min()
     return maxddvalue
     
 trade = trade.assign(profFactor = profitFactor)
 trade = trade.assign(dd = maxdd(trade))
 trade = trade.assign(sumprofit = trade.profit.sum())
+trade = trade.assign(avrprofit = trade.dinamicProfit[len(trade) - 1] / len(trade))
+trade = trade.assign(percentWinning = len(trade.loc[trade["profit"] > 0]) / len(trade))
+if trade.dd[0] == 0:
+    trade = trade.assign(recovery = trade.dinamicProfit[len(trade) - 1])
+else:
+    trade = trade.assign(recovery = trade.dinamicProfit[len(trade) - 1] / trade.dd)
 
 tradersinfo = trade.to_json(orient = "records")
 
