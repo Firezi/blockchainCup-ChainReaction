@@ -24,15 +24,17 @@ contract = web3.eth.contract(address=contract_address, abi=contract_interface['a
 
 
 def sendToBack(trade):
-	trade = list(trade)
-	if trade[1] == 'sell':
-		trade[4] = -1 * trade[4]
-	newdeal = pandas.DataFrame({"ticker": [trade[2]], "price": [trade[3]], "quantity": [trade[4] / 100],
-		                        "comission": [trade[5]], "time": [trade[6]], "address": [trade[0]]})
-	operations(newdeal)
+    trade = list(trade)
+    if trade[1] == 'sell':
+        trade[4] = -1 * trade[4]
+    print(trade)
+    newdeal = pandas.DataFrame({"ticker": [trade[2]], "price": [trade[3]], "quantity": [trade[4] / 100],
+                                "comission": [trade[5]], "time": [trade[6]], "address": [trade[0]]})
+    operations(newdeal)
 
 
-last_count = 0;
+last_count = 0
+
 
 def getTrades():
     global last_count
