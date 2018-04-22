@@ -40,5 +40,5 @@ for i in range (0, 5):
     print('buy')
     push('buy', 'SBR', 1000 + random.randint(1, 1000), i , 1.5, 1524377610 + i)
     print('sell')
-    push('buy', 'SBR', 1000 + random.randint(1, 1000), i, 1.5, 1524378610 + i)
+    push('sell', 'SBR', 1000 + random.randint(1, 1000), i, 1.5, 1524378610 + i)
 
