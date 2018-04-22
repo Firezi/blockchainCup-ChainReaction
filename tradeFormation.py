@@ -9,15 +9,12 @@ newdeals = pd.DataFrame({"address" : ["shoha1", "shoha1", "shoha1", "shoha1", "s
                          "time": ["4/20/18 16:20", "4/20/18 16:25", "4/20/18 16:35", "4/20/18 16:40", "4/20/18 16:45"]})
 
 #ЭТА СТРОЧКА ОБЯЗАТЕЛЬНО ДОЛЖНА БЫТЬ ПЕРЕД ИСПОЛНЕНИЕМ ФУНКЦИИ
-portfolio = pd.DataFrame({"address" : ["NA"],
-                          "ticker" : ["NA"],
-                          "price" : ["NA"],
-                          "quantity" : ["NA"]})
+portfolio = pd.DataFrame({"address" : ["NA1"],
+                          "ticker" : ["NA1"],
+                          "price" : ["50"],
+                          "quantity" : ["50"]})
 
-def operations(deals, portfolio = pd.DataFrame({"address" : [],
-                                                "ticker" : [],
-                                                "price" : [],
-                                                "quantity" : []})):
+def operations(deals, portfolio):
     trade = pd.DataFrame({"address" : [],
                           "ticker" : [],
                           "diffPrice" : [],
@@ -118,18 +115,22 @@ def operations(deals, portfolio = pd.DataFrame({"address" : [],
 
                         portfolio.at[index, "ticker"] = portTicker
                         portfolio.at[index, "quantity"] = portQuantity
-                        #portfolio.at[index, "price"] = portPrice
-                        
-                        portfolio = portfolio.drop(index2)
+
         else:
             portfolio = portfolio.append(deals.iloc[i])
+            portfolio.index = range(len(portfolio.index))
+        if len(portfolio.loc[portfolio["quantity"] == 0]) > 0:
+            portfolio = portfolio.drop(portfolio.loc[portfolio["quantity"] == 0].index[0])
+            portfolio.index = range(len(portfolio.index))
+        
     trade.profit = trade.diffQuantity * trade.diffPrice
     trade = trade.assign(percentProfit = trade.profit / 10000)
     
     trade = trade.assign(dinamicProfit = "NA")
-    trade.at[0, "dinamicProfit"] = trade.profit[0]
-    for i in range(1, len(trade)):
-        trade.at[i, "dinamicProfit"] = trade.profit[i] + trade.dinamicProfit[i - 1]
+    if len(trade) != 0:
+        trade.at[0, "dinamicProfit"] = trade.profit[0]
+        for i in range(1, len(trade)):
+            trade.at[i, "dinamicProfit"] = trade.profit[i] + trade.dinamicProfit[i - 1]
         
     return trade, portfolio
 
@@ -145,3 +146,4 @@ def maxdd(tradedemo):
     return maxddvalue
 
 maxDD = maxdd(tradedemo)
+
