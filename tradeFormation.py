@@ -111,8 +111,23 @@ def operations(deals, portfolio = pd.DataFrame({"ticker" : [],
                         portfolio = portfolio.drop(index2)
     trade.profit = trade.diffQuantity * trade.diffPrice
     trade = trade.assign(percentProfit = trade.profit / 10000)
+    
+    trade = trade.assign(dinamicProfit = "NA")
+    trade.at[0, "dinamicProfit"] = trade.profit[0]
+    for i in range(1, len(trade)):
+        trade.at[i, "dinamicProfit"] = trade.profit[i] + trade.dinamicProfit[i - 1]
+        
     return trade
 
 
 ###demo
 tradedemo = operations(deals = newdeals, portfolio = currentportfolio)
+
+profitFactor = (tradedemo.profit.sum() - tradedemo.profit.max()) / tradedemo.loc[tradedemo["profit"] < 0].profit.sum()
+
+def maxdd(tradedemo):
+    MinIndex = np.where(tradedemo.dinamicProfit == tradedemo.dinamicProfit.min())[0][0]
+    maxddvalue = tradedemo.iloc[range(MinIndex)].dinamicProfit.max() - tradedemo.dinamicProfit.min()
+    return maxddvalue
+
+maxDD = maxdd(tradedemo)
